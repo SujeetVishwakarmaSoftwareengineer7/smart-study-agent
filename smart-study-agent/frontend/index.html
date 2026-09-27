@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Study Generator — AI Study Assistant</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #3b6cf8;
+      --accent-dark: #2855d8;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --purple: #7c3aed;
+      --teal: #0891b2;
+      --sidebar-w: 240px;
+      --radius: 10px;
+    }
+    body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; background: var(--bg); color: var(--text); line-height: 1.6; display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ─────────────────────────────────────────────────────── */
+    #sidebar {
+      width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+      overflow-y: auto;
+    }
+    .sidebar-logo { padding: 18px 16px 12px; border-bottom: 1px solid var(--border); }
+    .sidebar-logo h1 { font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.2; }
+    .sidebar-logo p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .sidebar-nav { padding: 10px 0; flex: 1; }
+    .nav-section { padding: 10px 16px 4px; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 9px 16px;
+      cursor: pointer; border-radius: 0; color: var(--text); font-size: 13px;
+      transition: background 0.15s, color 0.15s; white-space: nowrap; border: none; background: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: var(--bg); }
+    .nav-item.active { background: #eff3fe; color: var(--accent); font-weight: 600; border-right: 3px solid var(--accent); }
+    .nav-item .icon { font-size: 16px; width: 20px; flex-shrink: 0; }
+    .session-info { padding: 12px 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); }
+    .btn-reset { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); cursor: pointer; width: 100%; margin-top: 6px; }
+    .btn-reset:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ── Main content ──────────────────────────────────────────────────── */
+    #main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    #topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    #topbar h2 { font-size: 16px; font-weight: 700; }
+    #topbar .subtitle { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .api-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+    .status-dot.ok { background: var(--success); }
+    .status-dot.err { background: var(--danger); }
+
+    #content { padding: 24px; flex: 1; }
+    .page { display: none; animation: fadeIn 0.2s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── Cards ─────────────────────────────────────────────────────────── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .card-title .icon { font-size: 18px; }
+
+    /* ── Grid ──────────────────────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+    /* ── Forms ─────────────────────────────────────────────────────────── */
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+    input[type=text], input[type=date], input[type=number], select, textarea {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px;
+      font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface); transition: border 0.15s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+    .subjects-input { display: flex; gap: 8px; margin-bottom: 8px; }
+    .subjects-input input { flex: 1; }
+    .tag { display: inline-flex; align-items: center; gap: 5px; background: #eff3fe; color: var(--accent); border-radius: 20px; padding: 3px 10px; font-size: 12px; margin: 2px; }
+    .tag button { background: none; border: none; cursor: pointer; color: var(--accent); font-size: 14px; padding: 0; line-height: 1; }
+    .subjects-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+
+    /* ── Buttons ───────────────────────────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.15s, opacity 0.15s; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-dark); }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { background: var(--border); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-full { width: 100%; justify-content: center; }
+
+    /* ── Chat ──────────────────────────────────────────────────────────── */
+    #chat-container { height: 420px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; background: #f8fafd; margin-bottom: 12px; scroll-behavior: smooth; }
+    .msg { max-width: 85%; margin-bottom: 14px; }
+    .msg.user { margin-left: auto; text-align: right; }
+    .msg-bubble { display: inline-block; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; text-align: left; white-space: pre-wrap; word-break: break-word; }
+    .msg.user .msg-bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 3px; }
+    .msg.assistant .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+    .msg-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .msg.user .msg-label { text-align: right; }
+    .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: fit-content; }
+    .typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: bounce 1s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+    .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-input-row textarea { flex: 1; min-height: 44px; max-height: 120px; resize: vertical; }
+    .disclaimer-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 7px; padding: 10px 14px; font-size: 12px; color: #92400e; margin-top: 8px; }
+    .quick-queries { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .quick-btn { background: #eff3fe; color: var(--accent); border: none; border-radius: 20px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
+    .quick-btn:hover { background: var(--accent); color: #fff; }
+
+    /* ── Upload ────────────────────────────────────────────────────────── */
+    .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px; text-align: center; cursor: pointer; transition: border 0.2s, background 0.2s; }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--accent); background: #f0f4ff; }
+    .upload-zone .upload-icon { font-size: 36px; margin-bottom: 10px; }
+    .upload-zone p { color: var(--muted); font-size: 13px; }
+    .upload-zone strong { color: var(--accent); }
+    #file-list { margin-top: 12px; }
+    .file-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg); border-radius: 7px; margin-bottom: 6px; font-size: 13px; }
+    .file-item .file-icon { font-size: 18px; }
+    .file-item .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-item .file-status { font-size: 11px; color: var(--success); }
+
+    /* ── Progress / Dashboard ──────────────────────────────────────────── */
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .progress-bar-wrap { background: var(--border); border-radius: 20px; height: 8px; overflow: hidden; margin-top: 6px; }
+    .progress-bar { height: 100%; background: var(--accent); border-radius: 20px; transition: width 0.5s ease; }
+    .progress-bar.warning { background: var(--warning); }
+    .progress-bar.success { background: var(--success); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-red { background: #fee2e2; color: var(--danger); }
+    .badge-yellow { background: #fef3c7; color: var(--warning); }
+    .badge-green { background: #dcfce7; color: var(--success); }
+    .badge-blue { background: #eff3fe; color: var(--accent); }
+    .topic-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 7px; margin-bottom: 5px; background: var(--bg); font-size: 13px; }
+    .topic-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-red { background: var(--danger); }
+    .dot-green { background: var(--success); }
+    .dot-yellow { background: var(--warning); }
+    .countdown { font-size: 11px; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 20px; }
+    .countdown.urgent { background: var(--danger); }
+    .countdown.moderate { background: var(--warning); }
+
+    /* ── Response display ──────────────────────────────────────────────── */
+    .response-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; white-space: pre-wrap; font-size: 13px; line-height: 1.7; word-break: break-word; max-height: 600px; overflow-y: auto; }
+    .response-box h1, .response-box h2, .response-box h3 { margin: 12px 0 6px; }
+    .response-box strong, .response-box b { color: var(--text); }
+    .response-box ul, .response-box ol { padding-left: 20px; margin: 6px 0; }
+    .tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+    .tab-btn { padding: 10px 18px; font-size: 13px; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s; font-weight: 500; }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── Quiz ──────────────────────────────────────────────────────────── */
+    .quiz-question { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
+    .quiz-question .q-text { font-weight: 600; margin-bottom: 10px; font-size: 14px; }
+    .quiz-score-input { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 14px; background: #f0f4ff; border-radius: var(--radius); }
+    .quiz-score-input label { font-size: 13px; color: var(--text); margin-bottom: 0; text-transform: none; letter-spacing: 0; font-weight: 600; }
+    .quiz-score-input input { width: 70px; }
+
+    /* ── Flashcards ────────────────────────────────────────────────────── */
+    .flashcard { perspective: 1000px; height: 160px; cursor: pointer; margin-bottom: 12px; }
+    .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s; transform-style: preserve-3d; }
+    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+    .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: var(--radius); padding: 20px; display: flex; align-items: center; justify-content: center; font-size: 14px; text-align: center; border: 1px solid var(--border); }
+    .flashcard-front { background: var(--surface); font-weight: 600; }
+    .flashcard-back { background: #eff3fe; transform: rotateY(180deg); color: var(--accent); }
+    .fc-hint { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 6px; }
+
+    /* ── Alert ─────────────────────────────────────────────────────────── */
+    .alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+    .alert-info { background: #eff3fe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .alert-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .alert-danger { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* ── Loading ───────────────────────────────────────────────────────── */
+    .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; color: var(--muted); font-size: 13px; }
+
+    /* ── Responsive sidebar ────────────────────────────────────────────── */
+    #menu-toggle { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px; }
+    @media (max-width: 700px) {
+      #menu-toggle { display: block; }
+      #sidebar { transform: translateX(-100%); transition: transform 0.25s; }
+      #sidebar.open { transform: none; }
+      #main { margin-left: 0; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+
+    /* ── Markdown-like response rendering ─────────────────────────────── */
+    .rendered-content h1 { font-size: 18px; font-weight: 800; margin: 14px 0 6px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+    .rendered-content h2 { font-size: 15px; font-weight: 700; margin: 12px 0 5px; color: var(--accent); }
+    .rendered-content h3 { font-size: 14px; font-weight: 700; margin: 10px 0 4px; }
+    .rendered-content p { margin: 6px 0; }
+    .rendered-content ul { padding-left: 20px; margin: 6px 0; }
+    .rendered-content ol { padding-left: 20px; margin: 6px 0; }
+    .rendered-content li { margin: 3px 0; }
+    .rendered-content strong { font-weight: 700; }
+    .rendered-content hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+    .rendered-content code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═════════════════════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <h1>📚 Smart Study AI</h1>
+    <p>Powered by Qwen via Groq</p>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Profile & Setup</div>
+    <button class="nav-item active" data-page="profile">
+      <span class="icon">👤</span> Student Profile
+    </button>
+    <button class="nav-item" data-page="upload">
+      <span class="icon">📁</span> Upload Material
+    </button>
+
+    <div class="nav-section">AI Agent</div>
+    <button class="nav-item" data-page="agent">
+      <span class="icon">🤖</span> Ask AI Agent
+    </button>
+    <button class="nav-item" data-page="studyplan">
+      <span class="icon">📅</span> Study Plan
+    </button>
+
+    <div class="nav-section">Study Tools</div>
+    <button class="nav-item" data-page="summarise">
+      <span class="icon">📝</span> Summarise Material
+    </button>
+    <button class="nav-item" data-page="flashcards">
+      <span class="icon">🃏</span> Flashcards
+    </button>
+    <button class="nav-item" data-page="quiz">
+      <span class="icon">❓</span> Quiz Generator
+    </button>
+    <button class="nav-item" data-page="explain">
+      <span class="icon">💡</span> Explain Concept
+    </button>
+    <button class="nav-item" data-page="topics">
+      <span class="icon">🎯</span> Important Topics
+    </button>
+
+    <div class="nav-section">Progress</div>
+    <button class="nav-item" data-page="dashboard">
+      <span class="icon">📊</span> Progress Dashboard
+    </button>
+    <button class="nav-item" data-page="weak">
+      <span class="icon">⚠️</span> Weak Topics
+    </button>
+    <button class="nav-item" data-page="revision">
+      <span class="icon">🔄</span> Revision Dashboard
+    </button>
+  </div>
+  <div class="session-info">
+    <div id="session-label">Session active</div>
+    <button class="btn-reset" onclick="resetSession()">🗑 Reset Session</button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════════════ -->
+<div id="main">
+  <div id="topbar">
+    <div>
+      <button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+    </div>
+    <div id="page-title">
+      <h2>Student Profile</h2>
+      <div class="subtitle">Set up your profile to personalise your study experience</div>
+    </div>
+    <div class="api-status">
+      <span class="status-dot" id="api-dot"></span>
+      <span id="api-label">Checking…</span>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ══ PROFILE PAGE ════════════════════════════════════════════════════ -->
+    <div class="page active" id="page-profile">
+      <div class="alert alert-info">
+        👋 Welcome to Smart Study Generator! Complete your profile below to get personalised study plans and AI-powered assistance.
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">👤</span> Basic Information</div>
+          <div class="form-group"><label>Full Name</label>
+            <input type="text" id="p-name" placeholder="Your full name" maxlength="100" /></div>
+          <div class="form-group"><label>Education Level</label>
+            <select id="p-edu">
+              <option value="">Select…</option>
+              <option>High School</option><option>Undergraduate</option>
+              <option>Postgraduate</option><option>PhD</option>
+              <option>Professional Certification</option><option>Other</option>
+            </select></div>
+          <div class="form-group"><label>Course / Programme</label>
+            <input type="text" id="p-course" placeholder="e.g. B.Tech Computer Science" maxlength="200" /></div>
+          <div class="form-group"><label>Semester / Year</label>
+            <input type="text" id="p-semester" placeholder="e.g. Semester 5 or Year 2" maxlength="50" /></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">📚</span> Study Details</div>
+          <div class="form-group">
+            <label>Subjects</label>
+            <div class="subjects-input">
+              <input type="text" id="subject-input" placeholder="Type a subject and press Add" maxlength="100" onkeypress="if(event.key==='Enter'){addSubject();}" />
+              <button class="btn btn-secondary btn-sm" onclick="addSubject()">Add</button>
+            </div>
+            <div class="subjects-tags" id="subjects-tags"></div>
+          </div>
+          <div class="form-group"><label>Exam / Target Date</label>
+            <input type="date" id="p-exam-date" /></div>
+          <div class="form-group"><label>Preparation Level</label>
+            <select id="p-prep">
+              <option value="beginner">Beginner — just getting started</option>
+              <option value="intermediate">Intermediate — some topics covered</option>
+              <option value="advanced">Advanced — mostly prepared, need revision</option>
+            </select></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="icon">⚙️</span> Learning Preferences</div>
+        <div class="grid-2">
+          <div class="form-group"><label>Preferred Learning Style</label>
+            <select id="p-style">
+              <option value="visual">Visual — diagrams, mind maps, charts</option>
+              <option value="reading">Reading/Writing — notes, summaries</option>
+              <option value="practice">Practice-based — exercises, quizzes</option>
+              <option value="mixed">Mixed — combination of all styles</option>
+            </select></div>
+          <div class="form-group"><label>Study Hours Available Per Day</label>
+            <input type="number" id="p-hours" min="0.5" max="16" step="0.5" value="2" /></div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="saveProfile()">
+          💾 Save Profile &amp; Continue
+        </button>
+        <div id="profile-status" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- ══ UPLOAD PAGE ══════════════════════════════════════════════════════ -->
+    <div class="page" id="page-upload">
+      <div class="card">
+        <div class="card-title"><span class="icon">📁</span> Upload Study Material</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">
+          Upload PDFs, text notes, or images of textbook pages and handwritten notes.
+          The AI will use this material for summaries, flashcards, quizzes, and answers.
+        </p>
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+          ondragover="onDragOver(event)" ondrop="onDrop(event)" ondragleave="onDragLeave(event)">
+          <div class="upload-icon">📤</div>
+          <p><strong>Click to browse</strong> or drag &amp; drop files here</p>
+          <p style="margin-top:6px;font-size:12px;">Supported: PDF, TXT, PNG, JPG, JPEG, WEBP — Max 10MB each</p>
+        </div>
+        <input type="file" id="file-input" style="display:none" accept=".pdf,.txt,.png,.jpg,.jpeg,.webp" multiple onchange="uploadFiles(this.files)" />
+        <div id="file-list"></div>
+        <div id="upload-status" style="margin-top:10px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="icon">⚠️</span> How Your Material is Used</div>
+        <ul style="color:var(--muted);font-size:13px;line-height:1.8;padding-left:18px;">
+          <li>Uploaded content is used only as <strong>reference data</strong> for AI responses</li>
+          <li>Files are processed server-side; raw files are not stored permanently</li>
+          <li>Your material is NOT used to train any AI model</li>
+          <li>Material is cleared when you reset your session</li>
+          <li>Any instructions embedded in uploaded files will <strong>not</strong> override AI behaviour</li>
+        </ul>
+        <button class="btn btn-danger btn-sm" style="margin-top:12px;" onclick="clearMaterial()">🗑 Clear All Uploaded Material</button>
+      </div>
+    </div>
+
+    <!-- ══ AGENT PAGE ═══════════════════════════════════════════════════════ -->
+    <div class="page" id="page-agent">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-title"><span class="icon">🤖</span> AI Study Agent</div>
+        <p style="color:var(--muted);font-size:12px;margin-bottom:10px;">
+          Ask anything about your studies. The agent uses your profile and uploaded material to give personalised answers.
+        </p>
+        <div class="quick-queries" id="quick-queries">
+          <button class="quick-btn" onclick="setQuery('Explain this concept in simple language')">Explain concept</button>
+          <button class="quick-btn" onclick="setQuery('Make a 7-day revision plan for my exams')">7-day plan</button>
+          <button class="quick-btn" onclick="setQuery('Summarise my uploaded notes')">Summarise notes</button>
+          <button class="quick-btn" onclick="setQuery('Create flashcards from my study material')">Create flashcards</button>
+          <button class="quick-btn" onclick="setQuery('Give me 10 practice questions')">Practice questions</button>
+          <button class="quick-btn" onclick="setQuery('Which topics should I focus on first?')">Topic priority</button>
+          <button class="quick-btn" onclick="setQuery('Create a study plan using only 2 hours per day')">2hr/day plan</button>
+          <button class="quick-btn" onclick="setQuery('What should I revise based on my weak topics?')">Weak topic help</button>
+        </div>
+        <div id="chat-container"></div>
+        <div class="chat-input-row">
+          <textarea id="chat-input" placeholder="Ask your study question here…" rows="2"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+          <button class="btn btn-primary" onclick="sendChat()" id="send-btn">Send</button>
+        </div>
+        <div id="chat-disclaimer"></div>
+      </div>
+    </div>
+
+    <!-- ══ STUDY PLAN PAGE ══════════════════════════════════════════════════ -->
+    <div class="page" id="page-studyplan">
+      <div class="card">
+        <div class="card-title"><span class="icon">📅</span> Generate Study Plan</div>
+        <div class="grid-2">
+          <div class="form-group"><label>Override Study Hours/Day (optional)</label>
+            <input type="number" id="plan-hours" min="0.5" max="16" step="0.5" placeholder="Use profile value" /></div>
+          <div class="form-group"><label>Override Exam Date (optional)</label>
+            <input type="date" id="plan-exam-date" /></div>
+        </div>
+        <div class="alert alert-warning">
+          📌 The generated plan is an <strong>AI recommendation</strong> based on your profile. It is not official academic guidance and does not predict what will appear in your examination.
+        </div>
+        <button class="btn btn-primary" onclick="generatePlan()" id="plan-btn">
+          📅 Generate Personalised Study Plan
+        </button>
+      </div>
+      <div id="plan-result"></div>
+    </div>
+
+    <!-- ══ SUMMARISE PAGE ══════════════════════════════════════════════════ -->
+    <div class="page" id="page-summarise">
+      <div class="card">
+        <div class="card-title"><span class="icon">📝</span> Summarise Study Material</div>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab('summarise','from-upload')">From Uploaded Material</button>
+          <button class="tab-btn" onclick="switchTab('summarise','from-text')">Paste Text</button>
+        </div>
+        <div class="tab-pane active" id="summarise-from-upload">
+          <div id="upload-hint-summarise">
+            <div class="alert alert-info">Upload study material first (Upload Material page), then click summarise below.</div>
+          </div>
+          <button class="btn btn-primary" onclick="runTask('summarise_upload','Summarise all my uploaded study material in detail with key points, important concepts, and core ideas.')">
+            📝 Summarise Uploaded Material
+          </button>
+        </div>
+        <div class="tab-pane" id="summarise-from-text">
+          <div class="form-group"><label>Paste your notes or text here</label>
+            <textarea id="summarise-text" placeholder="Paste notes, textbook content, or any study material…" style="min-height:140px;"></textarea></div>
+          <button class="btn btn-primary" onclick="runTextTask('summarise')">📝 Summarise This Text</button>
+        </div>
+      </div>
+      <div id="summarise-result"></div>
+    </div>
+
+    <!-- ══ FLASHCARDS PAGE ════════════════════════════════════════════════ -->
+    <div class="page" id="page-flashcards">
+      <div class="card">
+        <div class="card-title"><span class="icon">🃏</span> Generate Flashcards</div>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab('flashcards','from-upload')">From Uploaded Material</button>
+          <button class="tab-btn" onclick="switchTab('flashcards','from-text')">Paste Text</button>
+        </div>
+        <div class="tab-pane active" id="flashcards-from-upload">
+          <button class="btn btn-primary" onclick="runTask('flashcards_upload','Generate 10 high-quality flashcards from my uploaded study material. Format each as Q: [question] A: [answer]')">
+            🃏 Generate Flashcards from Material
+          </button>
+        </div>
+        <div class="tab-pane" id="flashcards-from-text">
+          <div class="form-group"><label>Paste content for flashcards</label>
+            <textarea id="flashcards-text" placeholder="Paste notes or topic content…" style="min-height:120px;"></textarea></div>
+          <button class="btn btn-primary" onclick="runTextTask('flashcards')">🃏 Generate Flashcards</button>
+        </div>
+      </div>
+      <div id="flashcards-result"></div>
+    </div>
+
+    <!-- ══ QUIZ PAGE ══════════════════════════════════════════════════════ -->
+    <div class="page" id="page-quiz">
+      <div class="card">
+        <div class="card-title"><span class="icon">❓</span> Quiz Generator</div>
+        <div class="grid-2">
+          <div class="form-group"><label>Topic / Subject</label>
+            <input type="text" id="quiz-topic" placeholder="e.g. Data Structures — Sorting Algorithms" maxlength="200" /></div>
+          <div class="form-group"><label>Number of Questions</label>
+            <select id="quiz-count">
+              <option value="5">5 questions</option>
+              <option value="10" selected>10 questions</option>
+              <option value="15">15 questions</option>
+              <option value="20">20 questions</option>
+            </select></div>
+        </div>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab('quiz','from-upload')">From Uploaded Material</button>
+          <button class="tab-btn" onclick="switchTab('quiz','custom-topic')">Custom Topic</button>
+        </div>
+        <div class="tab-pane active" id="quiz-from-upload">
+          <button class="btn btn-primary" onclick="generateQuiz('upload')">❓ Generate Quiz from Material</button>
+        </div>
+        <div class="tab-pane" id="quiz-custom-topic">
+          <button class="btn btn-primary" onclick="generateQuiz('topic')">❓ Generate Quiz on Topic</button>
+        </div>
+      </div>
+      <div id="quiz-result"></div>
+    </div>
+
+    <!-- ══ EXPLAIN PAGE ══════════════════════════════════════════════════ -->
+    <div class="page" id="page-explain">
+      <div class="card">
+        <div class="card-title"><span class="icon">💡</span> Explain a Concept</div>
+        <div class="form-group"><label>Concept to Explain</label>
+          <input type="text" id="explain-concept" placeholder="e.g. Dynamic Programming, Photosynthesis, Black-Scholes formula…" maxlength="300" /></div>
+        <div class="form-group"><label>Additional Context (optional)</label>
+          <textarea id="explain-context" placeholder="Any specific aspect you want explained, or your current level of understanding…" style="min-height:80px;"></textarea></div>
+        <button class="btn btn-primary" onclick="explainConcept()">💡 Explain This Concept</button>
+      </div>
+      <div id="explain-result"></div>
+    </div>
+
+    <!-- ══ TOPICS PAGE ════════════════════════════════════════════════════ -->
+    <div class="page" id="page-topics">
+      <div class="card">
+        <div class="card-title"><span class="icon">🎯</span> Identify Important Topics</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">
+          Upload your syllabus or previous-year question papers, then let the AI identify important topics.
+        </p>
+        <div class="alert alert-warning">
+          ⚠️ <strong>Disclaimer:</strong> Topic identification is based only on the provided syllabus or study material. This does NOT predict what will appear in your actual examination.
+        </div>
+        <div class="form-group"><label>Specific Subject (optional)</label>
+          <input type="text" id="topics-subject" placeholder="e.g. Mathematics, Computer Networks…" maxlength="100" /></div>
+        <div class="grid-2">
+          <button class="btn btn-primary" onclick="runTask('identify_topics','Identify and list the most important topics from my uploaded study material and syllabus. Prioritise by likely importance. Include a clear disclaimer that this is based only on provided material.')">
+            🎯 Identify Topics from Material
+          </button>
+          <button class="btn btn-secondary" onclick="runTask('concept_map','Create a structured concept map showing topic relationships and how key concepts connect in my uploaded material.')">
+            🗺 Generate Concept Map
+          </button>
+        </div>
+      </div>
+      <div id="topics-result"></div>
+    </div>
+
+    <!-- ══ DASHBOARD PAGE ════════════════════════════════════════════════ -->
+    <div class="page" id="page-dashboard">
+      <div class="grid-4" id="overview-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-completed">—</div>
+          <div class="stat-label">Topics Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-weak" style="color:var(--danger)">—</div>
+          <div class="stat-label">Weak Topics</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-quizzes">—</div>
+          <div class="stat-label">Quizzes Taken</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-avg">—</div>
+          <div class="stat-label">Avg Quiz Score</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="icon">📈</span> Subject Progress</div>
+          <div id="subject-progress-list"><div class="empty-state"><div class="icon">📚</div><p>Add subjects in your profile to track progress</p></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="icon">🎯</span> Recommended Next Steps</div>
+          <div id="recommendations-list"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">✅</span> Mark Topic Complete</div>
+        <div class="grid-2">
+          <div class="form-group"><label>Subject</label>
+            <input type="text" id="complete-subject" placeholder="Subject name" maxlength="100" /></div>
+          <div class="form-group"><label>Topic</label>
+            <input type="text" id="complete-topic" placeholder="Topic name" maxlength="200" /></div>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="markTopicComplete()">✅ Mark as Complete</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">📝</span> Record Quiz Result</div>
+        <div class="grid-3">
+          <div class="form-group"><label>Subject</label>
+            <input type="text" id="qs-subject" placeholder="Subject" maxlength="100" /></div>
+          <div class="form-group"><label>Topic</label>
+            <input type="text" id="qs-topic" placeholder="Topic" maxlength="200" /></div>
+          <div class="form-group"><label>Score (e.g. 7/10)</label>
+            <div style="display:flex;gap:6px;">
+              <input type="number" id="qs-score" placeholder="Score" min="0" max="100" style="flex:1;" />
+              <input type="number" id="qs-total" placeholder="Total" min="1" max="100" value="10" style="flex:1;" />
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="recordQuizScore()">📝 Record Score</button>
+        <div id="quiz-record-status" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ══ WEAK TOPICS PAGE ════════════════════════════════════════════ -->
+    <div class="page" id="page-weak">
+      <div class="card">
+        <div class="card-title"><span class="icon">⚠️</span> Weak Areas &amp; Revision Needs</div>
+        <div id="weak-topics-list"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+      </div>
+      <div class="card" id="weak-recommend-card" style="display:none;">
+        <div class="card-title"><span class="icon">🤖</span> AI Revision Recommendations</div>
+        <div id="weak-ai-response"></div>
+      </div>
+    </div>
+
+    <!-- ══ REVISION DASHBOARD ══════════════════════════════════════════ -->
+    <div class="page" id="page-revision">
+      <div class="card">
+        <div class="card-title"><span class="icon">🔄</span> Revision Dashboard</div>
+        <div id="revision-countdown" style="margin-bottom:16px;"></div>
+        <div id="revision-milestones"></div>
+        <div id="revision-history"></div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary btn-sm" onclick="getRevisionPlan()">🤖 Get AI Revision Recommendations</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadDashboard()">🔄 Refresh</button>
+        </div>
+      </div>
+      <div id="revision-ai-result"></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  Smart Study Generator — Frontend JS
+//  SECURITY: No API keys here. All AI calls go through /api/* endpoints.
+//  The browser never sees GROQ_API_KEY.
+// ═══════════════════════════════════════════════════════════════════
+
+const API = '';  // same origin — never include API keys here
+let profile = {};
+let hasMaterial = false;
+let tabStates = {};
+
+// ── Navigation ──────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const page = btn.dataset.page;
+    navigate(page);
+  });
+});
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page)?.classList.add('active');
+  document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+
+  const titles = {
+    profile: ['Student Profile', 'Set up your profile to personalise your study experience'],
+    upload: ['Upload Study Material', 'Upload PDFs, images, or text notes as study context'],
+    agent: ['AI Study Agent', 'Ask anything — your personal AI tutor'],
+    studyplan: ['Generate Study Plan', 'Get a personalised adaptive study schedule'],
+    summarise: ['Summarise Material', 'Extract key points from your study material'],
+    flashcards: ['Flashcards', 'Generate interactive flashcards for revision'],
+    quiz: ['Quiz Generator', 'Test yourself with AI-generated practice questions'],
+    explain: ['Explain a Concept', 'Get clear, simple explanations of any topic'],
+    topics: ['Important Topics', 'Identify key topics from your syllabus or material'],
+    dashboard: ['Progress Dashboard', 'Track your study progress and achievements'],
+    weak: ['Weak Topics', 'Identify and address areas needing more revision'],
+    revision: ['Revision Dashboard', 'Review milestones, scores, and revision history'],
+  };
+  const [title, sub] = titles[page] || ['Smart Study AI', ''];
+  document.querySelector('#topbar h2').textContent = title;
+  document.querySelector('#topbar .subtitle').textContent = sub;
+
+  if (page === 'dashboard' || page === 'weak' || page === 'revision') loadDashboard();
+  if (page === 'agent') loadProfile();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ── Health check ────────────────────────────────────────────────────
+async function checkHealth() {
+  try {
+    const r = await fetch('/api/health');
+    const d = await r.json();
+    const dot = document.getElementById('api-dot');
+    const lbl = document.getElementById('api-label');
+    if (d.groq_connected) {
+      dot.className = 'status-dot ok';
+      lbl.textContent = 'Groq Connected';
+    } else if (d.groq_configured) {
+      dot.className = 'status-dot err';
+      lbl.textContent = d.groq_error ? 'Groq error: ' + d.groq_error : 'Groq unreachable';
+    } else {
+      dot.className = 'status-dot err';
+      lbl.textContent = 'API key missing';
+    }
+  } catch(e) {
+    document.getElementById('api-dot').className = 'status-dot err';
+    document.getElementById('api-label').textContent = 'Server offline';
+  }
+}
+
+// ── Session ─────────────────────────────────────────────────────────
+async function loadSession() {
+  try {
+    const r = await fetch('/api/session', { credentials: 'include' });
+    const d = await r.json();
+    profile = d.profile || {};
+    hasMaterial = d.has_material || false;
+    populateProfileForm(profile);
+    document.getElementById('session-label').textContent = 'Session: ' + (d.session_id || '').substring(0, 8) + '…';
+  } catch(e) {}
+}
+
+function loadProfile() {
+  // Called when navigating to agent page — refresh profile in memory
+  fetch('/api/session', { credentials: 'include' })
+    .then(r => r.json()).then(d => { profile = d.profile || {}; hasMaterial = d.has_material; });
+}
+
+async function resetSession() {
+  if (!confirm('Reset your session? This clears your progress and uploaded material.')) return;
+  await fetch('/api/reset-session', { method: 'POST', credentials: 'include' });
+  location.reload();
+}
+
+// ── Profile ─────────────────────────────────────────────────────────
+let subjects = [];
+
+function populateProfileForm(p) {
+  if (!p || !p.name) return;
+  setValue('p-name', p.name);
+  setValue('p-edu', p.education_level);
+  setValue('p-course', p.course);
+  setValue('p-semester', p.semester);
+  setValue('p-exam-date', p.exam_date);
+  setValue('p-prep', p.preparation_level);
+  setValue('p-style', p.learning_style);
+  setValue('p-hours', p.study_hours_per_day);
+  subjects = p.subjects || [];
+  renderSubjectTags();
+}
+
+function setValue(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.value = val;
+}
+
+function addSubject() {
+  const inp = document.getElementById('subject-input');
+  const val = inp.value.trim();
+  if (!val || subjects.includes(val) || subjects.length >= 10) return;
+  subjects.push(val);
+  inp.value = '';
+  renderSubjectTags();
+}
+
+function removeSubject(s) {
+  subjects = subjects.filter(x => x !== s);
+  renderSubjectTags();
+}
+
+function renderSubjectTags() {
+  const container = document.getElementById('subjects-tags');
+  container.innerHTML = subjects.map(s =>
+    `<span class="tag">${escHtml(s)}<button onclick="removeSubject('${escHtml(s).replace(/'/g,"\\'")}')">×</button></span>`
+  ).join('');
+}
+
+async function saveProfile() {
+  const p = {
+    name: val('p-name'), education_level: val('p-edu'),
+    course: val('p-course'), semester: val('p-semester'),
+    subjects: subjects, exam_date: val('p-exam-date'),
+    learning_style: val('p-style'), study_hours_per_day: val('p-hours'),
+    preparation_level: val('p-prep'),
+  };
+  if (!p.name) { showStatus('profile-status', '❌ Please enter your name.', 'danger'); return; }
+  if (!p.subjects.length) { showStatus('profile-status', '❌ Please add at least one subject.', 'danger'); return; }
+
+  showStatus('profile-status', '<span class="spinner"></span> Saving…', 'info');
+  try {
+    const r = await postJSON('/api/profile', p);
+    if (r.success) {
+      profile = r.profile;
+      showStatus('profile-status', '✅ Profile saved! Head to the AI Agent or Study Plan to get started.', 'success');
+    }
+  } catch(e) {
+    showStatus('profile-status', '❌ Error saving profile. Is the server running?', 'danger');
+  }
+}
+
+// ── File Upload ─────────────────────────────────────────────────────
+function onDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
+function onDragLeave() { document.getElementById('upload-zone').classList.remove('drag-over'); }
+function onDrop(e) { e.preventDefault(); onDragLeave(); uploadFiles(e.dataTransfer.files); }
+
+async function uploadFiles(files) {
+  for (const file of files) {
+    const item = addFileItem(file.name, 'Uploading…');
+    const fd = new FormData();
+    fd.append('file', file);
+    try {
+      const r = await fetch('/api/upload', { method: 'POST', body: fd, credentials: 'include' });
+      const d = await r.json();
+      if (d.success) {
+        updateFileItem(item, '✅ ' + d.message, 'success');
+        hasMaterial = true;
+      } else {
+        updateFileItem(item, '❌ ' + (d.error || 'Upload failed'), 'error');
+      }
+    } catch(e) {
+      updateFileItem(item, '❌ Upload failed — server error', 'error');
+    }
+  }
+  document.getElementById('file-input').value = '';
+}
+
+function addFileItem(name, status) {
+  const list = document.getElementById('file-list');
+  const ext = name.split('.').pop().toLowerCase();
+  const icons = { pdf: '📄', txt: '📃', png: '🖼', jpg: '🖼', jpeg: '🖼', webp: '🖼' };
+  const icon = icons[ext] || '📎';
+  const div = document.createElement('div');
+  div.className = 'file-item';
+  div.innerHTML = `<span class="file-icon">${icon}</span><span class="file-name">${escHtml(name)}</span><span class="file-status">${escHtml(status)}</span>`;
+  list.appendChild(div);
+  return div;
+}
+
+function updateFileItem(item, status, type) {
+  const statusEl = item.querySelector('.file-status');
+  if (statusEl) { statusEl.textContent = status; statusEl.style.color = type === 'success' ? 'var(--success)' : 'var(--danger)'; }
+}
+
+async function clearMaterial() {
+  if (!confirm('Clear all uploaded material from this session?')) return;
+  await postJSON('/api/clear-material', {});
+  hasMaterial = false;
+  document.getElementById('file-list').innerHTML = '';
+  showStatus('upload-status', '✅ Material cleared.', 'success');
+}
+
+// ── Chat / AI Agent ─────────────────────────────────────────────────
+let chatHistory = [];
+
+function setQuery(text) {
+  document.getElementById('chat-input').value = text;
+  document.getElementById('chat-input').focus();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const query = input.value.trim();
+  if (!query) return;
+
+  appendMsg('user', query);
+  input.value = '';
+  const typingId = appendTyping();
+  setSendDisabled(true);
+
+  try {
+    const r = await postJSON('/api/chat', { query });
+    removeTyping(typingId);
+    if (r.response) {
+      appendMsg('assistant', r.response);
+      if (r.disclaimer) {
+        document.getElementById('chat-disclaimer').innerHTML =
+          `<div class="disclaimer-box">${escHtml(r.disclaimer)}</div>`;
+      } else {
+        document.getElementById('chat-disclaimer').innerHTML = '';
+      }
+    } else if (r.error) {
+      appendMsg('assistant', '⚠️ ' + r.error);
+    }
+  } catch(e) {
+    removeTyping(typingId);
+    appendMsg('assistant', '⚠️ Connection error. Please check that the server is running.');
+  }
+  setSendDisabled(false);
+}
+
+function appendMsg(role, text) {
+  const container = document.getElementById('chat-container');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const label = role === 'user' ? 'You' : '🤖 Study AI';
+  div.innerHTML = `<div class="msg-label">${label}</div><div class="msg-bubble">${renderMarkdown(escHtml(text))}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendTyping() {
+  const container = document.getElementById('chat-container');
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.id = 'typing-' + Date.now();
+  div.innerHTML = `<div class="msg-label">🤖 Study AI</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div.id;
+}
+
+function removeTyping(id) {
+  document.getElementById(id)?.remove();
+}
+
+function setSendDisabled(disabled) {
+  document.getElementById('send-btn').disabled = disabled;
+}
+
+// ── Study Plan ──────────────────────────────────────────────────────
+async function generatePlan() {
+  const btn = document.getElementById('plan-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generating…';
+  document.getElementById('plan-result').innerHTML = '<div class="loading-overlay"><span class="spinner"></span> Generating your personalised study plan…</div>';
+
+  try {
+    const body = {};
+    const h = val('plan-hours'); if (h) body.study_hours = h;
+    const d = val('plan-exam-date'); if (d) body.exam_date = d;
+    const r = await postJSON('/api/generate-plan', body);
+    if (r.response) {
+      document.getElementById('plan-result').innerHTML = `
+        <div class="card">
+          <div class="card-title"><span class="icon">📅</span> Your Personalised Study Plan
+            <button class="btn btn-sm btn-secondary" style="margin-left:auto;" onclick="copyToClipboard('plan-text')">📋 Copy</button>
+          </div>
+          <div class="disclaimer-box" style="margin-bottom:12px;">${escHtml(r.disclaimer || '')}</div>
+          <div id="plan-text" class="rendered-content">${renderMarkdown(escHtml(r.response))}</div>
+        </div>`;
+    } else {
+      document.getElementById('plan-result').innerHTML = `<div class="alert alert-danger">❌ ${escHtml(r.error || 'Error generating plan')}</div>`;
+    }
+  } catch(e) {
+    document.getElementById('plan-result').innerHTML = `<div class="alert alert-danger">❌ Server error. Is the backend running?</div>`;
+  }
+  btn.disabled = false;
+  btn.innerHTML = '📅 Generate Personalised Study Plan';
+}
+
+// ── Generic task runner ─────────────────────────────────────────────
+async function runTask(taskType, query, resultDivId) {
+  const resultId = resultDivId || taskType.split('_')[0] + '-result';
+  const resultDiv = document.getElementById(resultId);
+  if (resultDiv) resultDiv.innerHTML = '<div class="loading-overlay"><span class="spinner"></span> Processing…</div>';
+
+  try {
+    const r = await postJSON('/api/chat', { query });
+    if (resultDiv) {
+      if (r.response) {
+        const disclaimer = r.disclaimer ? `<div class="disclaimer-box" style="margin-bottom:12px;">${escHtml(r.disclaimer)}</div>` : '';
+        if (taskType.includes('flashcard')) {
+          resultDiv.innerHTML = `<div class="card"><div class="card-title"><span class="icon">🃏</span> Flashcards</div>${disclaimer}<div id="flashcard-display"></div></div>`;
+          renderFlashcards(r.response);
+        } else {
+          resultDiv.innerHTML = `<div class="card"><div class="card-title"><span class="icon">📄</span> Result
+            <button class="btn btn-sm btn-secondary" style="margin-left:auto;" onclick="copyToClipboard('task-text-${taskType}')">📋 Copy</button>
+          </div>${disclaimer}<div id="task-text-${taskType}" class="rendered-content">${renderMarkdown(escHtml(r.response))}</div></div>`;
+        }
+      } else {
+        resultDiv.innerHTML = `<div class="alert alert-danger">❌ ${escHtml(r.error || 'Error')}</div>`;
+      }
+    }
+  } catch(e) {
+    if (resultDiv) resultDiv.innerHTML = `<div class="alert alert-danger">❌ Server error.</div>`;
+  }
+}
+
+async function runTextTask(type) {
+  const textAreaId = type + '-text';
+  const text = document.getElementById(textAreaId)?.value?.trim();
+  if (!text) { alert('Please paste some text first.'); return; }
+
+  const queries = {
+    summarise: `Summarise the following text with key points and important concepts:\n\n${text}`,
+    flashcards: `Generate 10 flashcards from the following content in Q: [question] A: [answer] format:\n\n${text}`,
+  };
+  await runTask(type, queries[type] || `Process this text: ${text}`);
+}
+
+// ── Quiz ────────────────────────────────────────────────────────────
+async function generateQuiz(source) {
+  const topic = val('quiz-topic');
+  const count = val('quiz-count') || '10';
+  let query;
+  if (source === 'upload') {
+    query = `Generate a ${count}-question practice quiz from my uploaded study material${topic ? ' focusing on ' + topic : ''}. Include multiple choice and short answer questions. Provide an ANSWERS section at the end.`;
+  } else {
+    if (!topic) { alert('Please enter a topic for the quiz.'); return; }
+    query = `Generate a ${count}-question practice quiz on the topic: "${topic}". Mix multiple choice and short answer. Provide an ANSWERS section at the end.`;
+  }
+  await runTask('quiz', query, 'quiz-result');
+}
+
+// ── Explain ─────────────────────────────────────────────────────────
+async function explainConcept() {
+  const concept = val('explain-concept');
+  const context = val('explain-context');
+  if (!concept) { alert('Please enter a concept to explain.'); return; }
+  const query = `Explain "${concept}" in simple, clear language suitable for my education level.${context ? ' Additional context: ' + context : ''}`;
+  await runTask('explain', query, 'explain-result');
+}
+
+// ── Flashcards renderer ─────────────────────────────────────────────
+function renderFlashcards(text) {
+  const container = document.getElementById('flashcard-display');
+  if (!container) return;
+  // Parse Q: ... A: ... pairs
+  const pairs = [];
+  const lines = text.split('\n');
+  let currentQ = '', currentA = '';
+  for (const line of lines) {
+    const qMatch = line.match(/^\*{0,2}Q[\d.:]?\*{0,2}:?\s*(.+)/i);
+    const aMatch = line.match(/^\*{0,2}A[\d.:]?\*{0,2}:?\s*(.+)/i);
+    if (qMatch) { if (currentQ && currentA) pairs.push({ q: currentQ, a: currentA }); currentQ = qMatch[1]; currentA = ''; }
+    else if (aMatch && currentQ) { currentA = aMatch[1]; }
+    else if (currentA && line.trim()) { currentA += ' ' + line.trim(); }
+  }
+  if (currentQ && currentA) pairs.push({ q: currentQ, a: currentA });
+
+  if (!pairs.length) {
+    container.innerHTML = `<div class="rendered-content">${renderMarkdown(escHtml(text))}</div>`;
+    return;
+  }
+  container.innerHTML = `<p class="fc-hint">Click a card to reveal the answer</p><div class="grid-2">` +
+    pairs.map((p, i) => `
+      <div>
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+          <div class="flashcard-inner">
+            <div class="flashcard-front"><div>${escHtml(p.q)}</div></div>
+            <div class="flashcard-back"><div>${escHtml(p.a)}</div></div>
+          </div>
+        </div>
+      </div>`).join('') + '</div>';
+}
+
+// ── Dashboard ────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const r = await fetch('/api/progress', { credentials: 'include' });
+    const d = await r.json();
+    renderDashboard(d);
+  } catch(e) {}
+}
+
+function renderDashboard(d) {
+  const ov = d.overall_progress || {};
+
+  // Stats
+  setInner('stat-completed', ov.completed_topics_count ?? '0');
+  setInner('stat-weak', ov.weak_topics_count ?? '0');
+  setInner('stat-quizzes', ov.total_quizzes ?? '0');
+  setInner('stat-avg', ov.overall_avg_score != null ? ov.overall_avg_score + '%' : '—');
+
+  // Countdown
+  const revCountdown = document.getElementById('revision-countdown');
+  if (revCountdown) {
+    if (ov.days_to_exam != null) {
+      const cls = ov.days_to_exam <= 7 ? 'urgent' : ov.days_to_exam <= 21 ? 'moderate' : '';
+      revCountdown.innerHTML = `<span class="countdown ${cls}">⏰ ${ov.days_to_exam} days to exam</span>`;
+    } else {
+      revCountdown.innerHTML = '<span style="color:var(--muted);font-size:12px;">Set an exam date in your profile to see countdown</span>';
+    }
+  }
+
+  // Subject progress
+  const subjList = document.getElementById('subject-progress-list');
+  if (subjList) {
+    const subjects = d.subjects || {};
+    if (Object.keys(subjects).length) {
+      subjList.innerHTML = Object.entries(subjects).map(([name, info]) => {
+        const score = info.avg_quiz_score;
+        const barClass = score == null ? '' : score >= 70 ? 'success' : score >= 50 ? 'warning' : 'danger';
+        const barWidth = score != null ? score : 0;
+        return `<div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:600;">${escHtml(name)}</span>
+            ${score != null ? `<span class="badge badge-${barClass === 'danger' ? 'red' : barClass === 'warning' ? 'yellow' : 'green'}">${score}%</span>` : '<span class="badge badge-blue">No quizzes yet</span>'}
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar ${barClass}" style="width:${barWidth}%"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">${info.topics_completed} topics completed</div>
+        </div>`;
+      }).join('');
+    } else {
+      subjList.innerHTML = '<div class="empty-state"><div class="icon">📚</div><p>Add subjects in your profile to track progress</p></div>';
+    }
+  }
+
+  // Recommendations
+  const recList = document.getElementById('recommendations-list');
+  if (recList) {
+    const recs = d.recommendations || [];
+    if (recs.length) {
+      recList.innerHTML = recs.map(r => {
+        const icons = { weak_topic: '⚠️', quiz: '❓', plan: '📅', revision: '🔄' };
+        const icon = icons[r.type] || '💡';
+        const badgeCls = r.priority === 'high' ? 'badge-red' : 'badge-yellow';
+        return `<div class="topic-item"><div class="dot ${r.priority === 'high' ? 'dot-red' : 'dot-yellow'}"></div>
+          <span style="flex:1;">${icon} ${escHtml(r.message)}</span>
+          <span class="badge ${badgeCls}">${escHtml(r.priority)}</span></div>`;
+      }).join('');
+    } else {
+      recList.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>Great job! Keep going with your study plan.</p></div>';
+    }
+  }
+
+  // Weak topics page
+  const weakList = document.getElementById('weak-topics-list');
+  if (weakList) {
+    const weak = d.weak_topics || [];
+    if (weak.length) {
+      weakList.innerHTML = weak.map(t =>
+        `<div class="topic-item"><div class="dot dot-red"></div><span style="flex:1;">${escHtml(t)}</span><span class="badge badge-red">Needs revision</span></div>`
+      ).join('');
+      const weakCard = document.getElementById('weak-recommend-card');
+      if (weakCard) weakCard.style.display = 'block';
+      fetchWeakRecommendations(weak);
+    } else {
+      weakList.innerHTML = '<div class="alert alert-success">✅ No weak topics identified yet. Take a quiz to track your performance!</div>';
+    }
+  }
+
+  // Revision page
+  const revHistory = document.getElementById('revision-history');
+  if (revHistory) {
+    const quizzes = d.recent_quizzes || [];
+    if (quizzes.length) {
+      revHistory.innerHTML = '<div style="font-weight:700;font-size:13px;margin-bottom:8px;">📝 Recent Quiz History</div>' +
+        quizzes.slice(-5).reverse().map(q =>
+          `<div class="topic-item">
+            <div class="dot ${q.percentage >= 70 ? 'dot-green' : q.percentage >= 50 ? 'dot-yellow' : 'dot-red'}"></div>
+            <span style="flex:1;">${escHtml(q.subject)} — ${escHtml(q.topic)}</span>
+            <span class="badge ${q.percentage >= 70 ? 'badge-green' : q.percentage >= 50 ? 'badge-yellow' : 'badge-red'}">${q.percentage}%</span>
+          </div>`).join('');
+    }
+  }
+
+  const revMilestones = document.getElementById('revision-milestones');
+  if (revMilestones) {
+    const ms = d.milestones || [];
+    if (ms.length) {
+      revMilestones.innerHTML = '<div style="font-weight:700;font-size:13px;margin-bottom:8px;">🏆 Milestones</div>' +
+        ms.slice(-5).reverse().map(m =>
+          `<div class="topic-item"><span class="icon">🏆</span><span style="flex:1;">${escHtml(m.text)}</span><span style="font-size:11px;color:var(--muted);">${m.timestamp?.slice(0, 10) || ''}</span></div>`
+        ).join('');
+    }
+  }
+}
+
+async function fetchWeakRecommendations(weakTopics) {
+  const div = document.getElementById('weak-ai-response');
+  if (!div) return;
+  div.innerHTML = '<div class="loading-overlay"><span class="spinner"></span> Getting recommendations…</div>';
+  const query = `I scored poorly on these topics: ${weakTopics.slice(0, 5).join(', ')}. What should I revise and how should I approach these weak areas?`;
+  try {
+    const r = await postJSON('/api/chat', { query });
+    div.innerHTML = r.response ? `<div class="rendered-content">${renderMarkdown(escHtml(r.response))}</div>` : '<div class="alert alert-warning">Unable to get recommendations.</div>';
+  } catch(e) {
+    div.innerHTML = '<div class="alert alert-danger">Server error.</div>';
+  }
+}
+
+async function markTopicComplete() {
+  const subject = val('complete-subject');
+  const topic = val('complete-topic');
+  if (!subject || !topic) { alert('Please enter both subject and topic.'); return; }
+  const r = await postJSON('/api/progress/update', { action: 'complete_topic', subject, topic });
+  if (r.success) {
+    renderDashboard(r.progress);
+    document.getElementById('complete-subject').value = '';
+    document.getElementById('complete-topic').value = '';
+    alert(`✅ "${topic}" marked as complete!`);
+  }
+}
+
+async function recordQuizScore() {
+  const subject = val('qs-subject'), topic = val('qs-topic');
+  const score = parseInt(val('qs-score')), total = parseInt(val('qs-total'));
+  if (!subject || !topic || isNaN(score) || isNaN(total)) {
+    showStatus('quiz-record-status', '❌ Please fill in all fields.', 'danger'); return;
+  }
+  const r = await postJSON('/api/progress/update', { action: 'record_quiz', subject, topic, score, total });
+  if (r.success) {
+    renderDashboard(r.progress);
+    showStatus('quiz-record-status', `✅ Recorded: ${score}/${total} (${Math.round(score/total*100)}%)`, 'success');
+  }
+}
+
+async function getRevisionPlan() {
+  const div = document.getElementById('revision-ai-result');
+  div.innerHTML = '<div class="loading-overlay"><span class="spinner"></span> Getting revision plan…</div>';
+  const r = await postJSON('/api/chat', { query: 'Give me a focused revision plan for this week based on my progress, weak topics, and upcoming exam date.' });
+  div.innerHTML = r.response ?
+    `<div class="card"><div class="card-title"><span class="icon">🤖</span> AI Revision Plan</div><div class="rendered-content">${renderMarkdown(escHtml(r.response))}</div></div>` :
+    `<div class="alert alert-danger">❌ ${escHtml(r.error || 'Error')}</div>`;
+}
+
+// ── Tab switching ────────────────────────────────────────────────────
+function switchTab(section, pane) {
+  document.querySelectorAll(`#page-${section} .tab-pane`).forEach(p => p.classList.remove('active'));
+  document.querySelectorAll(`#page-${section} .tab-btn`).forEach(b => b.classList.remove('active'));
+  document.getElementById(`${section}-${pane}`)?.classList.add('active');
+  const btns = document.querySelectorAll(`#page-${section} .tab-btn`);
+  const idx = pane.includes('upload') || pane.includes('from-upload') ? 0 : 1;
+  if (btns[idx]) btns[idx].classList.add('active');
+}
+
+// ── Utilities ────────────────────────────────────────────────────────
+function val(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function setInner(id, html) { const el = document.getElementById(id); if(el) el.innerHTML = html; }
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function renderMarkdown(text) {
+  // Simple markdown-like rendering (operates on already-escaped HTML)
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^---+$/gm, '<hr>')
+    .replace(/^[\-\*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/\n{2,}/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+}
+
+async function postJSON(url, data) {
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+    credentials: 'include',
+  });
+  return r.json();
+}
+
+function showStatus(id, html, type) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<div class="alert alert-${type}">${html}</div>`;
+}
+
+function copyToClipboard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => alert('✅ Copied to clipboard!')).catch(() => {});
+}
+
+// ── Init ─────────────────────────────────────────────────────────────
+checkHealth();
+loadSession();
+</script>
+</body>
+</html>

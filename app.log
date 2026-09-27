@@ -1,0 +1,275 @@
+2026-09-26 16:39:44,459 [INFO] WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+2026-09-26 16:39:44,460 [INFO] Press CTRL+C to quit
+2026-09-26 16:39:44,464 [INFO]  * Restarting with stat
+2026-09-26 16:39:47,516 [WARNING]  * Debugger is active!
+2026-09-26 16:39:47,552 [INFO]  * Debugger PIN: 136-183-652
+2026-09-26 16:39:51,244 [INFO] 127.0.0.1 - - [26/Sep/2026 16:39:51] "GET / HTTP/1.1" 200 -
+2026-09-26 16:39:52,087 [INFO] 127.0.0.1 - - [26/Sep/2026 16:39:52] "GET /api/health HTTP/1.1" 200 -
+2026-09-26 16:39:52,095 [INFO] 127.0.0.1 - - [26/Sep/2026 16:39:52] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 16:39:52,169 [INFO] 127.0.0.1 - - [26/Sep/2026 16:39:52] "GET /favicon.ico HTTP/1.1" 404 -
+2026-09-26 16:40:40,837 [INFO] 127.0.0.1 - - [26/Sep/2026 16:40:40] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 16:41:34,133 [INFO] 127.0.0.1 - - [26/Sep/2026 16:41:34] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 17:15:06,322 [INFO] WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+2026-09-26 17:15:06,323 [INFO] Press CTRL+C to quit
+2026-09-26 17:15:06,328 [INFO]  * Restarting with stat
+2026-09-26 17:15:09,588 [WARNING]  * Debugger is active!
+2026-09-26 17:15:09,606 [INFO]  * Debugger PIN: 136-183-652
+2026-09-26 17:15:42,773 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:42] "GET / HTTP/1.1" 200 -
+2026-09-26 17:15:42,854 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:42] "GET /api/health HTTP/1.1" 200 -
+2026-09-26 17:15:42,870 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:42] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 17:15:43,280 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:43] "GET /favicon.ico HTTP/1.1" 404 -
+2026-09-26 17:15:52,660 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:52] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 17:15:55,934 [INFO] Intent detected: general_assist
+2026-09-26 17:15:56,775 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 17:15:56,806 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 17:15:56,807 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 17:15:56,810 [INFO] 127.0.0.1 - - [26/Sep/2026 17:15:56] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 17:16:04,482 [INFO] Intent detected: general_assist
+2026-09-26 17:16:04,751 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 17:16:04,753 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 17:16:04,754 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 17:16:04,756 [INFO] 127.0.0.1 - - [26/Sep/2026 17:16:04] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 17:16:08,891 [INFO] 127.0.0.1 - - [26/Sep/2026 17:16:08] "POST /api/generate-plan HTTP/1.1" 400 -
+2026-09-26 20:03:17,689 [INFO] WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+2026-09-26 20:03:17,690 [INFO] Press CTRL+C to quit
+2026-09-26 20:03:17,694 [INFO]  * Restarting with stat
+2026-09-26 20:03:20,629 [WARNING]  * Debugger is active!
+2026-09-26 20:03:20,659 [INFO]  * Debugger PIN: 136-183-652
+2026-09-26 20:03:45,692 [INFO] 127.0.0.1 - - [26/Sep/2026 20:03:45] "GET / HTTP/1.1" 304 -
+2026-09-26 20:03:45,867 [INFO] 127.0.0.1 - - [26/Sep/2026 20:03:45] "GET /api/health HTTP/1.1" 200 -
+2026-09-26 20:03:45,877 [INFO] 127.0.0.1 - - [26/Sep/2026 20:03:45] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 20:03:46,087 [INFO] 127.0.0.1 - - [26/Sep/2026 20:03:46] "GET /favicon.ico HTTP/1.1" 404 -
+2026-09-26 20:03:55,078 [INFO] File uploaded: Screenshot_2.png (session 86952fa5)
+2026-09-26 20:03:57,294 [ERROR] Image OCR error: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-09-26 20:03:57,313 [INFO] 127.0.0.1 - - [26/Sep/2026 20:03:57] "POST /api/upload HTTP/1.1" 200 -
+2026-09-26 20:04:05,924 [INFO] 127.0.0.1 - - [26/Sep/2026 20:04:05] "POST /api/clear-material HTTP/1.1" 200 -
+2026-09-26 20:04:07,899 [INFO] 127.0.0.1 - - [26/Sep/2026 20:04:07] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 20:04:11,604 [INFO] 127.0.0.1 - - [26/Sep/2026 20:04:11] "POST /api/generate-plan HTTP/1.1" 400 -
+2026-09-26 20:06:13,709 [INFO] Profile saved for session 86952fa5
+2026-09-26 20:06:13,711 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:13] "POST /api/profile HTTP/1.1" 200 -
+2026-09-26 20:06:18,952 [INFO] Profile saved for session 86952fa5
+2026-09-26 20:06:18,956 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:18] "POST /api/profile HTTP/1.1" 200 -
+2026-09-26 20:06:21,822 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:21] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 20:06:26,978 [INFO] Intent detected: general_assist
+2026-09-26 20:06:27,790 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:27,795 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:27,798 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:27,801 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:27] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:06:39,693 [INFO] Intent detected: explain
+2026-09-26 20:06:40,070 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:40,072 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:40,073 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:40,074 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:40] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:06:45,199 [INFO] Intent detected: flashcards
+2026-09-26 20:06:45,444 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:45,446 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:45,447 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:45,448 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:45] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:06:49,579 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:49,582 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:49,583 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:49,590 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:49] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:06:51,435 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:51,438 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:51,439 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:51,441 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:51] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:06:52,493 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:52,495 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:52,495 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:52,498 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:52] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:06:52,880 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:52,882 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:52,883 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:52,887 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:52] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:06:53,204 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:06:53,207 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:53,208 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:06:53,210 [INFO] 127.0.0.1 - - [26/Sep/2026 20:06:53] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:09,500 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:09,502 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:09,503 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:09,506 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:09] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:10,861 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:10,863 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:10,864 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:10,866 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:10] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:16,837 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:16,839 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:16,840 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:16,842 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:16] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:20,911 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:20,928 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:20,929 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:20,933 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:20] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:21,225 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:21,227 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,227 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,230 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:21] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:21,440 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:21,442 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,443 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,444 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:21] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:21,674 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:21,676 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,677 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,679 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:21] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:21,987 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:21,989 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,990 [ERROR] Study plan error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:21,992 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:21] "POST /api/generate-plan HTTP/1.1" 500 -
+2026-09-26 20:07:24,980 [INFO] Intent detected: summarise
+2026-09-26 20:07:25,117 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:25,120 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:25,121 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:25,124 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:25] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:26,459 [INFO] Intent detected: summarise
+2026-09-26 20:07:26,558 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:26,559 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:26,560 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:26,562 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:26] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:29,193 [INFO] Intent detected: summarise
+2026-09-26 20:07:29,297 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:29,299 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,300 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,305 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:29] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:29,378 [INFO] Intent detected: summarise
+2026-09-26 20:07:29,492 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:29,494 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,495 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,496 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:29] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:29,600 [INFO] Intent detected: summarise
+2026-09-26 20:07:29,709 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:29,711 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,711 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,714 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:29] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:29,780 [INFO] Intent detected: summarise
+2026-09-26 20:07:29,967 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:29,970 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,971 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:29,974 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:29] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:30,001 [INFO] Intent detected: summarise
+2026-09-26 20:07:30,131 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:30,134 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:30,141 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:30,145 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:30] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:51,510 [INFO] Intent detected: summarise
+2026-09-26 20:07:51,854 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:51,856 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:51,857 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:51,859 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:51] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:55,995 [INFO] Intent detected: flashcards
+2026-09-26 20:07:56,115 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:56,120 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:56,121 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:56,125 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:56] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:07:57,266 [INFO] Intent detected: flashcards
+2026-09-26 20:07:57,367 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:07:57,369 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:57,387 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:07:57,389 [INFO] 127.0.0.1 - - [26/Sep/2026 20:07:57] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:02,029 [INFO] Intent detected: flashcards
+2026-09-26 20:08:02,219 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:02,221 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,222 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,224 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:02] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:02,280 [INFO] Intent detected: flashcards
+2026-09-26 20:08:02,397 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:02,401 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,407 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,413 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:02] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:02,505 [INFO] Intent detected: flashcards
+2026-09-26 20:08:02,616 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:02,618 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,619 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:02,620 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:02] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:07,710 [INFO] Intent detected: quiz
+2026-09-26 20:08:08,027 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:08,029 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,030 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,031 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:08] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:08,084 [INFO] Intent detected: quiz
+2026-09-26 20:08:08,201 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:08,202 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,203 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,206 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:08] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:08,298 [INFO] Intent detected: quiz
+2026-09-26 20:08:08,393 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:08,398 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,399 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,401 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:08] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:08,526 [INFO] Intent detected: quiz
+2026-09-26 20:08:08,642 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:08:08,644 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,644 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:08:08,647 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:08] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:08:21,332 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:21] "GET /api/progress HTTP/1.1" 200 -
+2026-09-26 20:08:41,583 [INFO] Topic completed: dsa: array
+2026-09-26 20:08:41,590 [INFO] 127.0.0.1 - - [26/Sep/2026 20:08:41] "POST /api/progress/update HTTP/1.1" 200 -
+2026-09-26 20:09:07,843 [INFO] Weak topic identified: dsa: array (0.0%)
+2026-09-26 20:09:07,849 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:07] "POST /api/progress/update HTTP/1.1" 200 -
+2026-09-26 20:09:07,877 [INFO] Intent detected: general_assist
+2026-09-26 20:09:10,658 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:09:10,659 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:10,660 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:10,662 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:10] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:09:23,451 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:23] "GET /api/progress HTTP/1.1" 200 -
+2026-09-26 20:09:23,503 [INFO] Intent detected: general_assist
+2026-09-26 20:09:26,818 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:26] "GET /api/progress HTTP/1.1" 200 -
+2026-09-26 20:09:26,872 [INFO] Intent detected: general_assist
+2026-09-26 20:09:27,154 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:09:27,156 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:27,157 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:27,160 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:27] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:09:29,124 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:09:29,125 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:29,126 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:29,128 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:29] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:09:32,950 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:32] "GET /api/progress HTTP/1.1" 200 -
+2026-09-26 20:09:32,974 [INFO] Intent detected: general_assist
+2026-09-26 20:09:33,184 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:09:33,185 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:33,186 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:33,188 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:33] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:09:33,902 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:33] "GET /api/progress HTTP/1.1" 200 -
+2026-09-26 20:09:33,920 [INFO] Intent detected: general_assist
+2026-09-26 20:09:34,284 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:09:34,286 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:34,287 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:09:34,289 [INFO] 127.0.0.1 - - [26/Sep/2026 20:09:34] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:15:07,177 [INFO] Profile saved for session 86952fa5
+2026-09-26 20:15:07,187 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:07] "POST /api/profile HTTP/1.1" 200 -
+2026-09-26 20:15:10,843 [INFO] Intent detected: summarise
+2026-09-26 20:15:11,459 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-26 20:15:11,461 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:15:11,462 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-26 20:15:11,464 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:11] "POST /api/chat HTTP/1.1" 500 -
+2026-09-26 20:15:16,074 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:16] "GET / HTTP/1.1" 304 -
+2026-09-26 20:15:16,162 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:16] "GET /api/health HTTP/1.1" 200 -
+2026-09-26 20:15:16,175 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:16] "GET /api/session HTTP/1.1" 200 -
+2026-09-26 20:15:20,043 [INFO] Profile saved for session 86952fa5
+2026-09-26 20:15:20,045 [INFO] 127.0.0.1 - - [26/Sep/2026 20:15:20] "POST /api/profile HTTP/1.1" 200 -
+2026-09-27 11:46:03,854 [INFO] 127.0.0.1 - - [27/Sep/2026 11:46:03] "GET / HTTP/1.1" 304 -
+2026-09-27 11:46:04,021 [INFO] 127.0.0.1 - - [27/Sep/2026 11:46:04] "GET /api/health HTTP/1.1" 200 -
+2026-09-27 11:46:04,067 [INFO] 127.0.0.1 - - [27/Sep/2026 11:46:04] "GET /api/session HTTP/1.1" 200 -
+2026-09-27 11:46:04,479 [INFO] 127.0.0.1 - - [27/Sep/2026 11:46:04] "GET /favicon.ico HTTP/1.1" 404 -
+2026-09-27 11:54:55,275 [INFO] 127.0.0.1 - - [27/Sep/2026 11:54:55] "GET /api/session HTTP/1.1" 200 -
+2026-09-27 12:36:13,154 [INFO] 127.0.0.1 - - [27/Sep/2026 12:36:13] "GET /api/session HTTP/1.1" 200 -
+2026-09-27 12:36:20,409 [INFO] Intent detected: general_assist
+2026-09-27 12:36:21,711 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-27 12:36:21,719 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:36:21,720 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:36:21,732 [INFO] 127.0.0.1 - - [27/Sep/2026 12:36:21] "POST /api/chat HTTP/1.1" 500 -
+2026-09-27 12:38:21,471 [INFO] Intent detected: general_assist
+2026-09-27 12:38:22,335 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-27 12:38:22,339 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:38:22,348 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:38:22,356 [INFO] 127.0.0.1 - - [27/Sep/2026 12:38:22] "POST /api/chat HTTP/1.1" 500 -
+2026-09-27 12:38:43,425 [INFO] Intent detected: general_assist
+2026-09-27 12:38:43,935 [INFO] HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2026-09-27 12:38:43,938 [ERROR] Groq API error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:38:43,940 [ERROR] Agent error: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+2026-09-27 12:38:43,945 [INFO] 127.0.0.1 - - [27/Sep/2026 12:38:43] "POST /api/chat HTTP/1.1" 500 -
+2026-09-27 12:48:34,993 [INFO]  * Detected change in 'C:\\Users\\Hp\\Project IBM\\smart-study-agent\\backend\\agent.py', reloading
